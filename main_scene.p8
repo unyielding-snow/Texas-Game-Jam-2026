@@ -86,18 +86,33 @@ function _update()
     sfx(-1,0)	
   end
   
- 	local is_solid, is_interactive, interactive_tile_id, is_pick_up, pick_up_x, pick_up_y = hit(x, y, 16, 16)
+ 	local is_solid, is_interactive, interactive_tile_id, is_pick_up, pick_up_tile_id, pick_up_x, pick_up_y = hit(x, y, 16, 16)
 		
 		if not is_solid then
     player.x = x
     player.y = y
+    if not msg_shown and flr(player.x) == 29 and flr(player.y) == 25 then
+    	dtb_disp("maybe i didn't lose her..")
+    	msg_shown = true
+    	_dtb_c()
+    end
+    if not msg_shown and flr(player.x) == 26 and flr(player.y) == 27 then
+    	dtb_disp("it feels like i'm drifting...")
+    	msg_shown = true
+    	_dtb_c()
+    end
     if is_pick_up then
-		  	mset(pick_up_x ,pick_up_y, 1)
+    	item_id = mget(pick_up_x, pick_up_y)
+   		if item_id == 54 then
+	    	dtb_disp("this picture... i think she was looking at me, her smile is so bright")
+	    	mset(pick_up_x ,pick_up_y, 1)
+	  			--load("ending_1.p8")
+	  		end
   		end
   else
     if is_interactive and not msg_shown then
       local msg = get_interactive_message(interactive_tile_id)
-      dtb_disp(msg)
+     	dtb_disp(msg)
       msg_shown = true
     end
   end
@@ -134,6 +149,7 @@ function _draw()
 	
 	camera()
 	dtb_draw()
+	pal()
 end
 
 -- borrowed from https://gamedev.docrobs.co.uk/first-steps-in-pico-8-easy-collisions-with-map-tiles
@@ -142,6 +158,7 @@ function hit(x, y, w, h)
 	local is_interactive = false
 	local interactive_tile_id = nil
  local is_pickup = false
+ local pick_up_tile_id = nil
 	local pick_up_x = nil
 	local pick_up_y = nil
  
@@ -158,13 +175,14 @@ function hit(x, y, w, h)
         interactive_tile_id = tile_id
       end
       if fget(tile_id, 2) then
+      		pick_up_tile_id = tile_id
         is_pick_up = true
         pick_up_x = tile_x
         pick_up_y = tile_y
       end
     end
   end
-  return is_solid, is_interactive, interactive_tile_id, is_pick_up, pick_up_x, pick_up_y
+  return is_solid, is_interactive, interactive_tile_id, pick_up_tile_id, is_pick_up, pick_up_x, pick_up_y
 end
 
 
@@ -176,11 +194,11 @@ end
 
 function get_interactive_message(tile_id)
 	if tile_id == 38 then -- bed
-		return "it's a cozy bed... 🐱"
+		return "it's a cozy bed.. smells like warm tea leaves after the rain 🐱"
 	elseif tile_id == 40 then --bookshelf
-		return "the bookshelf contains a message hehe 😐."
+		return "her favorite romance novels, spines worn from the nights she would read to me"
 	elseif tile_id == 18 then --drawer
-		return "⧗here is something in the drawer ❎"
+		return "her clutter makes me want to sit here, like she'll walk in at any second."
 	elseif tile_id == 54 then --photo
 		return "♥"
 	else
@@ -321,7 +339,7 @@ __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000a0a0a0a0a0a0a0a0202020a0a0a0a0a0a0a0a0a0a0202020a0a0a0a0a0a0a0a0a0a0a0a020202020a0a0a0a0a0a0a0a0
 __gff__
-0000010101010100010100000000000000000301010101010101000000000000000101010101030103010000000000000001010100000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000010101010100010100000000000000000301040101010101000000000000000101010101030103010000000000000001010100000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __map__
 00000000000000000000000000000000000000000a0a0a0a0a0a000000000000000a0a0a0a0202020202020a0a0a0a0a0a0a0a0a02020a02020a0a0a0a0a0a0a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
