@@ -8,7 +8,6 @@ bar_w = 8        -- width of each bar
 bar_speed = 2    -- how many pixels per frame it moves
 
 said_dialogue = false
-
 cutscene = 1
 
 function _init()
@@ -24,43 +23,36 @@ function _update()
     bar_x += bar_speed
 
     -- if finished bar, allow dialogue
+
     if bar_x > 128 then
         if not said_dialogue then
-        said_dialogue = true
-        -- Frame One
-        dtb_disp("Marianne! I finally found you!", function()
-            music(3,1000)
-        end)
-        dtb_disp("''It's good to see you again, Hero.")
-
-        dtb_disp("Come on Marianne! Let's get out of here! We have so much stuff to see, so much stuff to do, so much--")
-
-        dtb_disp("''I'm sorry, but I can't go, Hero...''")
-
-        dtb_disp("Why? Why are you resisting?")
-
-        dtb_disp("Why are you leaving me again?")
-
-        dtb_disp("''Deep down, we both know the truth, my love...''")
-
-        -- Frame Two
-        dtb_disp("'You're dead, Hero. We can't be together")
+            said_dialogue = true
+            -- Frame One
         
-        dtb_disp("''They say when you die, you relive all your favortie memories, connections, one last time.''")
-
-        dtb_disp("''This is it my love...''")
-
-        dtb_disp("''Farewell.''", function()
-            switch_cutscene()
-        end)
-
-        dtb_disp("No! Wait!")
-
-        dtb_disp("''I love you.", function()
-            ending()
-        end)
-    end
-    
+        			 dtb_disp("marianne! i finally found you!", function()
+                music(3,1000)
+            end)
+            dtb_disp("\"it's good to see you again, hero.\"")
+            dtb_disp("come on marianne! let's get out of here! we have so much stuff to see, so much stuff to do, so much--")
+            dtb_disp("\"i'm sorry, but i can't go, hero...\"")
+            dtb_disp("why? why are you resisting?")
+            dtb_disp("why are you leaving me again?")
+           	dtb_disp("\"deep down, we both know the truth, my love...\"")
+           	
+           	--frame two
+           	dtb_disp("\"you're dead, hero. we can't be together.\"")
+           	dtb_disp("\"they say when you die, you relive all your favortie memories, connections, one last time.\"")
+           	dtb_disp("\"this is it my love...\"")
+          	 dtb_disp("\"farewell.\"", function()
+          	 	switch_cutscene()
+          	 end)
+          	 dtb_disp("no! wait!")
+          	 dtb_disp("\"i love you.\"", function()
+          	 	ending()
+          	 end)
+        end
+   	end 
+   	   
     dtb_update()
 end
 
