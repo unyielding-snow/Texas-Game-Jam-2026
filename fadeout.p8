@@ -23,7 +23,6 @@ function _init()
   -- optional: draw your tilemap initially
   -- we will use a 16x16 tilemap (128x128 pixels)
   map(0,0,0,0,16,16)
-
 end
 
 function _draw()
@@ -45,15 +44,15 @@ function _update()
  	dtb_update()
  	
  	if text_num == 0 then
-			dtb_disp("      ★press c to cry★")
+			dtb_disp("   ★press c to remember★")
 	
 			dtb_disp("it used to be...")
 			
-			dtb_disp("just the two of us")
+			dtb_disp("just the two of us.")
 			
 			dtb_disp("golden like a rusted locket")
 			
-			dtb_disp("but everything changed.")
+			dtb_disp("until everything changed...")
 	
 			dtb_disp("you must go back and collect all the memories")
 	
