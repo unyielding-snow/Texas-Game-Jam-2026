@@ -33,7 +33,7 @@ function _draw()
   
   if fading<0 then
     print("complete!",46,62,7)
-    load("floor.p8")
+    load("main_scene.p8")
 				run()
   end
   
@@ -58,7 +58,11 @@ function _update()
 	
 			dtb_disp("you must go back and collect all the memories")
 	
-	 	dtb_disp("before everything fades",function()
+			dtb_disp("before everything fades.")
+	
+			dtb_disp("save her...")
+	
+	 	dtb_disp("you can do it, hero.",function()
 	    --whatever is in this function is called after this dialogue is done.
 	    start_fadeout()
 			end)
