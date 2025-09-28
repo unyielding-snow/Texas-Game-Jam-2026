@@ -12,7 +12,7 @@ function _init()
 	player.direction = "down"
 	player.moving = false
 	player.sprite = 0
-	player.speed = 1
+	player.speed = 0.2
 
 	player.sprites = {
   down = {
