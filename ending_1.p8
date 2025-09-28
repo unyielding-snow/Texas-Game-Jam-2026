@@ -60,6 +60,11 @@ function _draw()
 		dtb_disp("''uou're are already dead.''")
 		dtb_disp("''stop clinging onto these memories.''")
 		dtb_disp("∧e have already g🅾️ne extinct.")
+		dtb_disp("accept your fate and die.")
+		dtb_disp("hope you can find our memories in your next life.")
+		dtb_disp("this is goodbye.", function()
+			load("credits.p8")
+		end)
 	end	
 
  map(0,0,0,0,16,16) -- draw tilemap
