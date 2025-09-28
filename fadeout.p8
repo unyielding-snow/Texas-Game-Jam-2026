@@ -34,7 +34,8 @@ function _draw()
   
   if fading<0 then
     print("complete!",46,62,7)
-    fading=0
+    load("floor.p8")
+				run()
   end
   
   dtb_draw()
@@ -44,14 +45,26 @@ function _update()
  	dtb_update()
  	
  	if text_num == 0 then
-	 	dtb_disp("dtb_prompt also has a callback which is called when the piece of dialogue is finished.",function()
+			dtb_disp("      ★press c to cry★")
+	
+			dtb_disp("it used to be...")
+			
+			dtb_disp("just the two of us")
+			
+			dtb_disp("golden like a rusted locket")
+			
+			dtb_disp("but everything changed.")
+	
+			dtb_disp("you must go back and collect all the memories")
+	
+	 	dtb_disp("before everything fades",function()
 	    --whatever is in this function is called after this dialogue is done.
-	    sfx(1)
+	    start_fadeout()
 			end)
 			text_num += 1
 		end
 
-  if start_fade and btnp(4) and fading==0 then
+  if start_fade and fading==0 then
     fadeout()
   end
 end
@@ -77,7 +90,9 @@ function fadeout()
   end
 end
 
-
+function start_fadeout()
+	start_fade = true
+end
 __gfx__
 00000000222222220000000022222222000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000222222220000000022222222000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
