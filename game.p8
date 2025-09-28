@@ -1,7 +1,10 @@
 pico-8 cartridge // http://www.pico-8.com
 version 43
 __lua__
+local msg_shown = false
+
 function _init()
+	dtb_init(3)
 	-- borrowed from https://gist.github.com/shaneriley/cae98eac6136e7293b28
 	player = {}
 	player.x = 25
@@ -39,6 +42,7 @@ function _init()
 end
 
 function _update()
+	dtb_update()
 -- player movement --
 	player.moving = false
 	local x = player.x
@@ -61,14 +65,29 @@ function _update()
     move("down")
   end
   
-  if not hit(x,y, 16, 16) then
+		local is_solid, is_interactive, interactive_tile_id = hit(x, y, 16, 16)
+		if not is_solid then
     player.x = x
     player.y = y
+  else
+    if is_interactive and not msg_shown then
+      local msg = get_interactive_message(interactive_tile_id)
+      dtb_disp(msg)
+      msg_shown = true
+    end
   end
+  
+  if msg_shown then
+			if btnp(4) then 
+				dtb_q = {} 
+				msg_shown = false 
+			end
+	end
 
   if not player.moving then
     player.sprite = 0
   end
+
 end
 
 
@@ -81,21 +100,30 @@ function _draw()
 	spr(frame[2], player.x + 8, player.y)
 	spr(frame[3], player.x, player.y + 8)
 	spr(frame[4], player.x + 8, player.y + 8)
+
+	dtb_draw()
 end
 
 -- borrowed from https://gamedev.docrobs.co.uk/first-steps-in-pico-8-easy-collisions-with-map-tiles
 function hit(x, y, w, h)
+	local is_solid = false
+	local is_interactive = false
+	local interactive_tile_id = nil
   for i = x, x + w - 1, 8 do
     for j = y, y + h - 1, 8 do
       local tile_x = flr(i / 8)
       local tile_y = flr(j / 8)
       local tile_id = mget(tile_x, tile_y)
       if fget(tile_id, 0) then  -- check flag 0
-        return true
+        is_solid = true
+      end
+      if fget(tile_id, 1) then
+        is_interactive = true
+        interactive_tile_id = tile_id
       end
     end
   end
-  return false
+  return is_solid, is_interactive, interactive_tile_id
 end
 
 function move(dir)
@@ -104,6 +132,18 @@ function move(dir)
   player.sprite = (player.sprite + 1) % #player.sprites[dir]
 end
 
+-- dialogue text box library by oli414. minimized.
+function dtb_init(n) dtb_q={}dtb_f={}dtb_n=3 if n then dtb_n=n end _dtb_c() end function dtb_disp(t,c)local s,l,w,h,u s={}l=""w=""h=""u=function()if #w+#l>29 then add(s,l)l=""end l=l..w w=""end for i=1,#t do h=sub(t,i,i)w=w..h if h==" "then u()elseif #w>28 then w=w.."-"u()end end u()if l~=""then add(s,l)end add(dtb_q,s)if c==nil then c=0 end add(dtb_f,c)end function _dtb_c()dtb_d={}for i=1,dtb_n do add(dtb_d,"")end dtb_c=0 dtb_l=0 end function _dtb_l()dtb_c+=1 for i=1,#dtb_d-1 do dtb_d[i]=dtb_d[i+1]end dtb_d[#dtb_d]=""sfx(2)end function dtb_update()if #dtb_q>0 then if dtb_c==0 then dtb_c=1 end local z,x,q,c z=#dtb_d x=dtb_q[1]q=#dtb_d[z]c=q>=#x[dtb_c]if c and dtb_c>=#x then if btnp(4) then if dtb_f[1]~=0 then dtb_f[1]()end del(dtb_f,dtb_f[1])del(dtb_q,dtb_q[1])_dtb_c()sfx(2)return end elseif dtb_c>0 then dtb_l-=1 if not c then if dtb_l<=0 then local v,h v=q+1 h=sub(x[dtb_c],v,v)dtb_l=1 if h~=" " then sfx(0)end if h=="." then dtb_l=6 end dtb_d[z]=dtb_d[z]..h end if btnp(4) then dtb_d[z]=x[dtb_c]end else if btnp(4) then _dtb_l()end end end end end function dtb_draw()if #dtb_q>0 then local z,o z=#dtb_d o=0 if dtb_c<z then o=z-dtb_c end rectfill(2,125-z*8,125,125,0)if dtb_c>0 and #dtb_d[#dtb_d]==#dtb_q[1][dtb_c] then print("\x8e",118,120,1)end for i=1,z do print(dtb_d[i],4,i*8+119-(z+o)*8,7)end end end
+
+function get_interactive_message(tile_id)
+	if tile_id == 20 then
+		return "it's a cozy bed... 🐱"
+	elseif tile_id == 18 then
+		return "the bookshelf contains a message hehe 😐."
+	else
+		return "smells funny in here...."
+	end
+end
 
 
 __gfx__
@@ -171,7 +211,7 @@ __gfx__
 00000011111100000000001110110000000000111011000000111111000000000011011100000000001101110000000000000000000000000000000000000000
 00000011101100000000001110000000000000000011000000110111000000000000011100000000001100000000000000000000000000000000000000000000
 __gff__
-0000000101010000000000000000000000000100010000000000000000000000000101010101000000000000000000000001010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000103010000000000000000000000000300030000000000000000000000000103010101000000000000000000000001010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __map__
 0101070501010101000000000000000000000000000001010101110101000000010101010101010121220101010101010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
