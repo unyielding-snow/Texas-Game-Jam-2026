@@ -16,9 +16,6 @@ function _init()
   -- optional: draw your tilemap initially
   -- we will use a 16x16 tilemap (128x128 pixels)
   map(0,0,0,0,16,16)
-
-  print("tilemap fade. by dw817",18,100,1)
-  print("press ❎ to fade",26,110,7)
 end
 
 function _draw()
