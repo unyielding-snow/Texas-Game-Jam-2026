@@ -1,16 +1,22 @@
 pico-8 cartridge // http://www.pico-8.com
 version 43
 __lua__
+function dtb_init(n) dtb_q={}dtb_f={}dtb_n=3 if n then dtb_n=n end _dtb_c() end function dtb_disp(t,c)local s,l,w,h,u s={}l=""w=""h=""u=function()if #w+#l>29 then add(s,l)l=""end l=l..w w=""end for i=1,#t do h=sub(t,i,i)w=w..h if h==" "then u()elseif #w>28 then w=w.."-"u()end end u()if l~=""then add(s,l)end add(dtb_q,s)if c==nil then c=0 end add(dtb_f,c)end function _dtb_c()dtb_d={}for i=1,dtb_n do add(dtb_d,"")end dtb_c=0 dtb_l=0 end function _dtb_l()dtb_c+=1 for i=1,#dtb_d-1 do dtb_d[i]=dtb_d[i+1]end dtb_d[#dtb_d]=""sfx(2)end function dtb_update()if #dtb_q>0 then if dtb_c==0 then dtb_c=1 end local z,x,q,c z=#dtb_d x=dtb_q[1]q=#dtb_d[z]c=q>=#x[dtb_c]if c and dtb_c>=#x then if btnp(4) then if dtb_f[1]~=0 then dtb_f[1]()end del(dtb_f,dtb_f[1])del(dtb_q,dtb_q[1])_dtb_c()sfx(2)return end elseif dtb_c>0 then dtb_l-=1 if not c then if dtb_l<=0 then local v,h v=q+1 h=sub(x[dtb_c],v,v)dtb_l=1 if h~=" " then sfx(0)end if h=="." then dtb_l=6 end dtb_d[z]=dtb_d[z]..h end if btnp(4) then dtb_d[z]=x[dtb_c]end else if btnp(4) then _dtb_l()end end end end end function dtb_draw()if #dtb_q>0 then local z,o z=#dtb_d o=0 if dtb_c<z then o=z-dtb_c end rectfill(2,125-z*8,125,125,0)if dtb_c>0 and #dtb_d[#dtb_d]==#dtb_q[1][dtb_c] then print("\x8e",118,120,1)end for i=1,z do print(dtb_d[i],4,i*8+119-(z+o)*8,7)end end end
+
 -- slow fade-in from black
 fading = 0
-fadespeed = 1.5   -- higher = slower
+fadespeed = 10   -- higher = slower
 fade_step = 0
-fade_max = 32   -- more steps = slower/more gradual
+fade_max = 150   -- more steps = slower/more gradual
 
 mask_radius = 0
 mask_max = 50
 
 function _init()
+	   dtb_init()
+	   
+	   begin_fill()
+	   
     -- start black
     cls(0)
     for i=0,15 do pal(i,0,1) end
@@ -18,13 +24,47 @@ function _init()
 end
 
 function _update()
+   	dtb_update()
+
     if fading > 0 then
         fadein()
     end
 end
 
+event_time = time()
+fill_circle = false
+once = true
+
 function _draw()
-    map(0,0,0,0,16,16) -- draw tilemap
+	if fill_circle then
+				mask_radius = mask_radius + 1
+    -- draw black rectangle
+    rectfill(0,0,127,127,0)
+    -- cut out circle
+    circfill(64,64,mask_radius,7) -- color doesn't matter if using pal
+	end	
+	 
+	if once and time() - event_time >= 3 then
+		once = false
+		
+		dtb_disp("no...")
+		dtb_disp("⧗his c█nt be.")
+		dtb_disp("''⬇️on't you know, hero?''")		
+		dtb_disp("''uou're are already dead.''")
+		dtb_disp("''stop clinging onto these memories.''")
+		dtb_disp("∧e have already g🅾️ne extinct.")
+	end	
+
+ map(0,0,0,0,16,16) -- draw tilemap
+
+ dtb_draw()
+end
+
+function begin_fill()
+	event_time = time()
+	fill_circle = true
+	fading = 1
+	fade_step = 0
 end
 
 -- smooth fade-in: gradually restore colors
@@ -339,9 +379,9 @@ f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d0e0f0e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e0e0e0e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __sfx__
-000100001b5701f5701d5701f570225602755024542275422e532335223a52230502355023c5022b5022e5022e502335022e502305023a7023a7023a7023a7023a7023a7023a7023a7003a7003a7003b7003b700
+000100001b5001f5001d5001f500250502750017002275022e502335023a50230502355023c5022b5022e5022e502335022e502305023a7023a7023a7023a7023a7023a7023a7023a7003a7003a7003b7003b700
 011000001805000000000001a0501c050000001f050000002105023050210501f0501c050000001f0501c050170500000000000180501c050000001f0500000022050210501f0501e0501f0501f0421f02200000
-010600000a3750f37513375183750f3750f47511475164751b47516475164751b4651d4651b4551b4551d445224451d4351d43524425274252441524415294052b40524405244052740529405274052440527405
+00060000103050f30513305183050f3050f40511405164051b40516405164051b4051d4051b4051b4051d405224051d4051d40524405274052440524405294052b40524405244052740529405274052440527405
 __music__
 03 01424344
 
