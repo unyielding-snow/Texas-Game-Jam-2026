@@ -64,12 +64,12 @@ function _update()
   end
   
   
-  --if not hit(x,y, 16, 16) then
-    --player.x = x
-    --player.y = y
-  --end
- 	player.x = x
-  player.y = y
+  if not hit(x*8,y*8, 16, 16) then
+    player.x = x
+    player.y = y
+  end
+ 	---player.x = x
+  ---player.y = y
 
   if not player.moving then
     player.sprite = 0
