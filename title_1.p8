@@ -47,7 +47,7 @@ function _update()
 			dtb_disp("   ★press c to remember★")
 	
 			dtb_disp("it used to be...", function()
-				music(2,5000)
+				music(14,5000)
 			end)
 			
 			dtb_disp("just the two of us.")
@@ -414,4 +414,8 @@ __music__
 00 11141618
 00 11131719
 02 11424344
+01 07424344
+00 09424344
+00 0b424344
+02 0d424344
 
