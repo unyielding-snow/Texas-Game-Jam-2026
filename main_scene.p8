@@ -138,7 +138,7 @@ function _update()
   else
     if is_interactive and not msg_shown then
       local msg = get_interactive_message(interactive_tile_id)
-     	dtb_disp(msg)
+      --dtb_disp(msg)
       msg_shown = true
     end
   end
