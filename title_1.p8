@@ -34,7 +34,6 @@ function _draw()
   if fading<0 then
     print("complete!",46,62,7)
     load("main_scene.p8")
-				run()
   end
   
   dtb_draw()
