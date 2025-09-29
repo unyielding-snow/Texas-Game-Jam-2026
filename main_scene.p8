@@ -11,7 +11,7 @@ ending_1 = false
 ending_2 = false
 
 function _init()
- --music(2,1000)	
+ music(2,1000,0)	
 	dtb_init(3)
 	-- borrowed from https://gist.github.com/shaneriley/cae98eac6136e7293b28
 	player.direction = "down"
@@ -83,10 +83,10 @@ function _update()
   end
   
   if has_moved and frame > 10 then
-    sfx(15,0)
+    sfx(15)
     frame = 0
   elseif not has_moved then 
-    sfx(-1,0)	
+    sfx(-1)	
   end
   
  	local is_solid, is_interactive, interactive_tile_id, is_pick_up, pick_up_tile_id, pick_up_x, pick_up_y = hit(x, y, 16, 16)
